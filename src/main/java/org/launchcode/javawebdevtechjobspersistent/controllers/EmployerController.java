@@ -24,9 +24,11 @@ public class EmployerController {
         return "employers";
     }
 
+    //"@{'/employers/view/' + ${employer.id}}"
+
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
-        model.addAttribute(new Employer());
+        model.addAttribute("employer", new Employer());
         return "employers/add";
     }
 
