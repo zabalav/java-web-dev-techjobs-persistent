@@ -24,8 +24,6 @@ public class EmployerController {
         return "employers/index";
     }
 
-    //"@{'/employers/view/' + ${employer.id}}"
-
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
         model.addAttribute("employer", new Employer());
