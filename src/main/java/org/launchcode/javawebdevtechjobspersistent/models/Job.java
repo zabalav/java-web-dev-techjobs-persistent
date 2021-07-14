@@ -13,7 +13,7 @@ public class Job extends AbstractEntity{
     private Employer employer;
     private String skills;
 
-    @OneToMany(mappedBy = "") //"Job" or "JobData"
+    @OneToMany //mappedBy = "employer"
     @JoinColumn
     private final List<Job> jobs = new ArrayList<>();
 
