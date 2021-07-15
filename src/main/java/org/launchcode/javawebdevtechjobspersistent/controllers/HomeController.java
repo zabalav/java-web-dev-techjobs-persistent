@@ -1,5 +1,6 @@
 package org.launchcode.javawebdevtechjobspersistent.controllers;
 
+import org.launchcode.javawebdevtechjobspersistent.models.Employer;
 import org.launchcode.javawebdevtechjobspersistent.models.Job;
 import org.launchcode.javawebdevtechjobspersistent.models.Skill;
 import org.launchcode.javawebdevtechjobspersistent.models.data.EmployerRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.launchcode.javawebdevtechjobspersistent.models.data.JobRepository;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -24,6 +26,9 @@ public class HomeController {
 
     @Autowired
     private SkillRepository skillRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
 
     @RequestMapping("")
     public String index(Model model) {
@@ -51,13 +56,16 @@ public class HomeController {
             model.addAttribute("title", "Add Job");
             return "add";
         }
-
-        model.addAttribute("employer", employerRepository.findById(employerId));
-        employerRepository.save(newJob.getEmployer()); // TODO getEmployer(employerId)
+        Employer employer = employerRepository.findById(employerId).orElse(new Employer());
+        newJob.setEmployer(employer);
+//        model.addAttribute("employer", employerRepository.findById(employerId));
+//        employerRepository.save(newJob.getEmployer());
         List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
         newJob.setSkills(skillObjs);
         model.addAttribute("skills", skillObjs);
+        jobRepository.save(newJob);
         return "redirect:";
+
     }
 
     @GetMapping("view/{jobId}")
