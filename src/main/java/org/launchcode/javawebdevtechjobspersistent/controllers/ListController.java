@@ -9,9 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import org.launchcode.javawebdevtechjobspersistent.models.JobData;
-
 import java.util.HashMap;
 
 /**
@@ -33,18 +31,15 @@ public class ListController {
     static HashMap<String, String> columnChoices = new HashMap<>();
 
     public ListController () {
-
         columnChoices.put("all", "All");
         columnChoices.put("employer", "Employer");
         columnChoices.put("skill", "Skill");
-
     }
 
     @RequestMapping("")
     public String list(Model model) {
         model.addAttribute("employer", employerRepository.findAll());
         model.addAttribute("skill", skillRepository.findAll());
-
         return "list";
     }
 
@@ -59,7 +54,6 @@ public class ListController {
             model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
         }
         model.addAttribute("jobs", jobs);
-
         return "list-jobs";
     }
 }

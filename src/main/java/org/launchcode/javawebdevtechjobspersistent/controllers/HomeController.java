@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.launchcode.javawebdevtechjobspersistent.models.data.JobRepository;
-
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by LaunchCode
@@ -32,9 +32,7 @@ public class HomeController {
 
     @RequestMapping("")
     public String index(Model model) {
-
         model.addAttribute("title", "My Jobs");
-
         return "index";
     }
 
@@ -44,6 +42,7 @@ public class HomeController {
         model.addAttribute(new Job());
         model.addAttribute("employers", employerRepository.findAll());
         model.addAttribute("skills", skillRepository.findAll());
+        model.addAttribute("title", "New Job");
         return "add";
     }
 
@@ -51,7 +50,6 @@ public class HomeController {
     public String processAddJobForm(@ModelAttribute @Valid Job newJob, Errors errors, Model model,
                                     @RequestParam (required=false) int employerId,
                                     @RequestParam (required=false) List<Integer> skills) {
-
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
             return "add";
@@ -63,14 +61,17 @@ public class HomeController {
         model.addAttribute("skills", skillObjs);
         jobRepository.save(newJob);
         return "redirect:";
-
     }
 
     @GetMapping("view/{jobId}")
     public String displayViewJob(Model model, @PathVariable int jobId) {
-
-        return "view";
+        Optional optJob = jobRepository.findById(jobId);
+        if (!optJob.isEmpty()) {
+            Job job = (Job) optJob.get();
+            model.addAttribute("job", job);
+            return "view";
+        } else {
+            return "redirect:/";
+        }
     }
-
-
 }
